@@ -1,3 +1,8 @@
+# TODO
+- Understand hyperparameters.
+- Do a function that highlights the answer in the text (similar to [link](https://www.google.com/url?sa=i&url=https%3A%2F%2Fadataanalyst.com%2Fmachine-learnin[…]e=images&cd=vfe&ved=0CAsQjRxqFwoTCPjl-MSalvMCFQAAAAAdAAAAABAJ)).
+- Benchmark both the question generating models, and the answer ones.
+
 # Question Generation using 🤗transformers
 
 - [Question Generation using 🤗transformers](#question-generation-using-transformers)
