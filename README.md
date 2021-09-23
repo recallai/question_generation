@@ -52,6 +52,16 @@ Here the answer span is highlighted within the text with special highlight token
 
 This idea is proposed in the "A Recurrent BERT-based Model for Question Generation" [paper](https://www.aclweb.org/anthology/D19-5821.pdf). See section 4.3 
 
+# Hyperameters to lookout for
+
+**Tokenizer**:
+- ```max_length```: Tokenizers max length (sentences with higher number of tokens will be cut out). Value: 512
+
+**Generate**:
+- ```num_beams```:??
+  **Questions**:
+    - ```max_length```: 32.
+
 ### answer extraction models
 
 As the answer aware models need answers for generating question, we need something which can extract answer like spans from the text. This can be done using various methods like NER, noun-phrase extarction etc. But here a model is trained to extract answer like spans, to see how it'll work. With T5, answer extarction is done using the text-to-format. 
