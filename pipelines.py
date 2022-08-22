@@ -2,6 +2,9 @@ import itertools
 import logging
 from typing import Optional, Dict, Union
 
+import os
+
+
 from nltk import sent_tokenize
 
 import torch
@@ -90,6 +93,24 @@ class QGPipeline:
         dec = [self.ans_tokenizer.decode(ids, skip_special_tokens=False) for ids in outs]
         answers = [item.split('<sep>') for item in dec]
         answers = [i[:-1] for i in answers]
+        
+        return sents, answers
+    
+    def extract_highlights(self, inputs):
+        inputs = " ".join(inputs.split())
+
+        sents, inputs = self._prepare_inputs_for_ans_extraction(inputs)
+        inputs = self._tokenize(inputs, padding=True, truncation=True)
+
+        outs = self.ans_model.generate(
+            input_ids=inputs['input_ids'].to(self.device), 
+            attention_mask=inputs['attention_mask'].to(self.device), 
+            max_length=32,
+        )
+        
+        dec = [self.ans_tokenizer.decode(ids, skip_special_tokens=False) for ids in outs]
+        answers_intermediate = [item.split('<sep>') for item in dec]
+        answers = [i[:-1] for i in answers_intermediate]
         
         return sents, answers
     
