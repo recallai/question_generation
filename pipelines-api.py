@@ -21,12 +21,11 @@ class QGPipeline:
     """Poor man's QG pipeline"""
     def __init__(
         self,
-        model: PreTrainedModel,
+        model: str,
         tokenizer: PreTrainedTokenizer,
-        ans_model: PreTrainedModel,
+        ans_model: str,
         ans_tokenizer: PreTrainedTokenizer,
         qg_format: str,
-        use_cuda: bool
     ):
         self.model = model
         self.tokenizer = tokenizer
@@ -35,19 +34,6 @@ class QGPipeline:
         self.ans_tokenizer = ans_tokenizer
 
         self.qg_format = qg_format
-
-        self.device = "cuda" if torch.cuda.is_available() and use_cuda else "cpu"
-        self.model.to(self.device)
-
-        if self.ans_model is not self.model:
-            self.ans_model.to(self.device)
-
-        assert self.model.__class__.__name__ in ["T5ForConditionalGeneration", "BartForConditionalGeneration"]
-        
-        if "T5ForConditionalGeneration" in self.model.__class__.__name__:
-            self.model_type = "t5"
-        else:
-            self.model_type = "bart"
 
     def __call__(self, inputs: str):
         inputs = " ".join(inputs.split())
@@ -68,27 +54,40 @@ class QGPipeline:
         return output
     
     def _generate_questions(self, inputs):
-        inputs = self._tokenize(inputs, padding=True, truncation=True)
+        #inputs = self._tokenize(inputs, padding=True, truncation=True)
         
-        outs = self.model.generate(
-            input_ids=inputs['input_ids'].to(self.device), 
-            attention_mask=inputs['attention_mask'].to(self.device), 
-            max_length=32,
-            num_beams=4,
-        )
+        # Instead of the following block of code,
+        # we need to use hf api
+        #
+        #
+        #outs = self.model.generate(
+        #    input_ids=inputs['input_ids'].to(self.device), 
+        #    attention_mask=inputs['attention_mask'].to(self.device), 
+        #    max_length=32,
+        #    num_beams=4,
+        #)
         
-        questions = [self.tokenizer.decode(ids, skip_special_tokens=True) for ids in outs]
+        #questions = [self.tokenizer.decode(ids, skip_special_tokens=True) for ids in outs]
         return questions
     
     def _extract_answers(self, context):
         sents, inputs = self._prepare_inputs_for_ans_extraction(context)
-        inputs = self._tokenize(inputs, padding=True, truncation=True)
+        
+        # now we need to call hf api once for each input
+        
+        
+        #inputs = self._tokenize(inputs, padding=True, truncation=True)
+        
 
-        outs = self.ans_model.generate(
-            input_ids=inputs['input_ids'].to(self.device), 
-            attention_mask=inputs['attention_mask'].to(self.device), 
-            max_length=32,
-        )
+        # Instead of the following block of code,
+        # we need to use hf api
+        #
+        #
+        #outs = self.ans_model.generate(
+        #    input_ids=inputs['input_ids'].to(self.device), 
+        #    attention_mask=inputs['attention_mask'].to(self.device), 
+        #    max_length=32,
+        #)
         
         dec = [self.ans_tokenizer.decode(ids, skip_special_tokens=False) for ids in outs]
         answers = [item.split('<sep>') for item in dec]
@@ -97,22 +96,23 @@ class QGPipeline:
         return sents, answers
     
     def extract_highlights(self, inputs):
-        inputs = " ".join(inputs.split())
+        #inputs = " ".join(inputs.split())
 
-        sents, inputs = self._prepare_inputs_for_ans_extraction(inputs)
-        inputs = self._tokenize(inputs, padding=True, truncation=True)
+        #sents, inputs = self._prepare_inputs_for_ans_extraction(inputs)
+        #inputs = self._tokenize(inputs, padding=True, truncation=True)
 
-        outs = self.ans_model.generate(
-            input_ids=inputs['input_ids'].to(self.device), 
-            attention_mask=inputs['attention_mask'].to(self.device), 
-            max_length=32,
-        )
+        #outs = self.ans_model.generate(
+        #    input_ids=inputs['input_ids'].to(self.device), 
+        #    attention_mask=inputs['attention_mask'].to(self.device), 
+        #    max_length=32,
+        #)
         
-        dec = [self.ans_tokenizer.decode(ids, skip_special_tokens=False) for ids in outs]
-        answers_intermediate = [item.split('<sep>') for item in dec]
-        answers = [i[:-1] for i in answers_intermediate]
+        #dec = [self.ans_tokenizer.decode(ids, skip_special_tokens=False) for ids in outs]
+        #answers_intermediate = [item.split('<sep>') for item in dec]
+        #answers = [i[:-1] for i in answers_intermediate]
         
-        return sents, answers
+        #return sents, answers
+        return
     
     def _tokenize(self,
         inputs,
