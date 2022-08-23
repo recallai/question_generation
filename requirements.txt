@@ -1,0 +1,8 @@
+jupyterlab
+readability-lxml
+requests==2.27.0
+datasets
+matplotlib
+pandas
+numpy
+nltk

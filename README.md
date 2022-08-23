@@ -1,7 +1,21 @@
-# TODO
-* [ ] Understand hyperparameters.
-* [ ] Do a function that highlights the answer in the text (similar to [link](https://www.google.com/url?sa=i&url=https%3A%2F%2Fadataanalyst.com%2Fmachine-learnin[…]e=images&cd=vfe&ved=0CAsQjRxqFwoTCPjl-MSalvMCFQAAAAAdAAAAABAJ)).
-* [ ] Benchmark both the question generating models, and the answer ones.
+# Recall-AI
+
+## Workflow (docker)
+Running this container starts a jupyter on port 8888 of the container
+
+### 1. To create the image
+
+> 1. first `cd` into the base directory of this project
+> 2. `docker build -t <image_name> .`
+
+(will take a couple of minutes but only needs to be ran once)
+### 2. To run the container
+
+> 1. `docker run -it -p <machine_port>:8888 <image_name>`
+
+### 3. To access the jupyter
+
+> open your browser and type in the url `http://localhost:<machine_port>/tree`
 
 # Question Generation using 🤗transformers
 
