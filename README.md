@@ -11,10 +11,19 @@ Running this container starts a jupyter on port 8888 of the container
 (will take a couple of minutes but only needs to be ran once)
 ### 2. To run the container
 
-> 1. `docker run -it -p <machine_port>:8888 --mount type=bind,source="$(pwd)",target=/app/ <image_name>`
+> 1. `docker run -it -p <machine_port>:8888`
 ### 3. To access the jupyter
 
 > open your browser and type in the url `http://localhost:<machine_port>/tree`
+
+### Development
+
+To save progress of your container into a new image, do the following
+
+1. Make your changes inside the container
+2. exit the container
+3. get the container's id
+4. `docker commit [CONTAINER_ID] [new_image_name]`
 
 # Question Generation using 🤗transformers
 
